@@ -8,39 +8,48 @@ class App extends Component {
     this.state = {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [
-        {
-        id: 1,
-        username: "Bob",
-        content: "Has anyone seen my marbles?",
-        },
-        {
-        id: 2,
-        username: "Anonymous",
-        content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-        }
-      ]
-    }
-  }
 
-
-  handleEnter(){
-    if (e.key === 'Enter') {
-      console.log('do validate');
+      ],
     }
+    this.setState(this.state)
   }
 
 
 
 
-  componentDidMount() {
-  console.log("componentDidMount <App />");
-  setTimeout(function() {
-    console.log("Simulating incoming message");
-    // Clone data object and adds a new message to the list of messages in the data store
-     var messages = [...this.state.messages, {id: 3, username: "Michelle", content: "Hello there!"}]
-    // Update the state of the app component. This will call render()
-    this.setState({messages})
-  }.bind(this), 3000);
+  InputEnter = (event) => {
+    var message = {username: this.state.currentUser.name, content: event.target.value};
+
+    this.ws.send(JSON.stringify(message))
+
+  }
+
+  UserEnter(event){
+
+    let userName = event.target.value;
+    this.state.currentUser.name = userName;
+    this.setState(this.state);
+  }
+
+
+
+  handleMessage = (responseFromServer) => {
+    var serverMessage = JSON.parse(responseFromServer.data)
+    console.log(serverMessage)
+    this.state.messages.push(serverMessage)
+    this.setState(this.state)
+  }
+
+
+  componentDidMount = () => {
+    console.log("componentDidMount <App />");
+
+    this.ws = new WebSocket('ws://localhost:5000/');
+    this.ws.onopen = (event) => {
+      console.log("connection to server established")
+      this.ws = event.target
+      this.ws.onmessage = this.handleMessage
+    }
   }
 
   render(){
@@ -51,7 +60,10 @@ class App extends Component {
           </nav>
         <div>
           <MessageList listOfMessages={this.state.messages}/>
-          <ChatBar currentUser={this.state.currentUser.name} onEnter={handleEnter()}/>
+          <ChatBar
+            pressInputEnter={this.InputEnter.bind(this)}
+            pressUserEnter={this.UserEnter.bind(this)}
+          />
         </div>
       </div>
     );

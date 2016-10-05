@@ -1,28 +1,33 @@
 import React, {Component} from 'react';
 
 class ChatBar extends Component {
-  constructor(props){
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
+
+
+  onInputEnter = (event) => {
+    if(event.key === 'Enter'){
+      this.props.pressInputEnter(event)
+      this.refs.chatbar.value = ""
+    }
   }
 
-  handleChange(event){
-    this.setState({value: event.target.value})
-    console.log(event.target.value)
-
+  onUserEnter = (event) => {
+      this.props.pressUserEnter(event)
   }
-
 
 
   render() {
     return (
       <footer>
-        <input id="username" type="text" value={this.props.currentUser}/>
-        <input id="new-message" type="text" onChange={this.handleChange}/>
+        <input id="username"
+              type="text"
+              onKeyPress={this.onUserEnter}
+        />
+        <input id="new-message"
+              ref="chatbar"
+              type="text"
+              onKeyPress={this.onInputEnter}
+        />
       </footer>
-
-
-
 
     );
   }
