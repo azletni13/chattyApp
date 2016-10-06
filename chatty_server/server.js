@@ -26,15 +26,30 @@ const broadcast = (data) => {
 wss.on('connection', (ws) => {
   console.log('Client connected');
 
+  var usersOnline = wss.clients.length;
+  console.log(usersOnline)
+  broadcast(usersOnline);
 
   ws.on('message', (clientMessage) => {
     var incomingMsg = JSON.parse(clientMessage);
     var uniqueID = uuid.v1();
-    incomingMsg.id = uniqueID;
 
-    console.log(incomingMsg);
+    if (incomingMsg.type === "postMessage"){
+      incomingMsg.id = uniqueID;
+      incomingMsg.type = "incomingMessage"
 
-    broadcast(incomingMsg);
+      broadcast(incomingMsg);
+
+    }
+
+    if (incomingMsg.type == "postNotification"){
+      incomingMsg.id = uniqueID;
+      incomingMsg.type = "incomingNotification"
+
+      broadcast(incomingMsg);
+
+    }
+
 
   })
 
