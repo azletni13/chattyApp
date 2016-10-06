@@ -8,13 +8,17 @@ class MessageList extends Component{
         <div>
           {
             this.props.listOfMessages.map((message) => (
-              <Message key={message.id} name={message.username} content={message.content} />
+              <Message key={message.id}
+                name={message.username}
+                content={message.content}
+                type={message.type}
+              />
             ))
           }
-        </div>
 
+        </div>
       </div>
     );
   }
-};
+}
 export default MessageList;

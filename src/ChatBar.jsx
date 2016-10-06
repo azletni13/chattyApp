@@ -11,7 +11,9 @@ class ChatBar extends Component {
   }
 
   onUserEnter = (event) => {
+    if(event.key === 'Enter' && this.props.initialName !== this.refs.namebox.value){
       this.props.pressUserEnter(event)
+    }
   }
 
 
@@ -21,6 +23,8 @@ class ChatBar extends Component {
         <input id="username"
               type="text"
               onKeyPress={this.onUserEnter}
+              ref="namebox"
+
         />
         <input id="new-message"
               ref="chatbar"
@@ -31,5 +35,5 @@ class ChatBar extends Component {
 
     );
   }
-};
+}
 export default ChatBar;
