@@ -17,19 +17,32 @@ const wss = new SocketServer({ server });
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
+
+var colours = ['red', 'green', 'purple', 'blue'];
+
+//function that broadcasts any data to all clients connected to the web socket (wss)
 const broadcast = (data) => {
   wss.clients.forEach( client => {
     client.send(JSON.stringify(data));
   })
 }
 
+//
 wss.on('connection', (ws) => {
   console.log('Client connected');
-
+  //gets the number of users online
   var usersOnline = wss.clients.length;
-  console.log(usersOnline)
-  broadcast(usersOnline);
+  //gets a random colour from array of colours
+  var rand = colours[Math.floor(Math.random() * colours.length)]
 
+  var userID = 0;
+  var usersOnline = {usersOnline: usersOnline}
+  var randomColour = {assignColour: rand}
+
+
+  broadcast(usersOnline)
+  ws.send(JSON.stringify(randomColour));
+  //receives all messages from connected clients and checks post type
   ws.on('message', (clientMessage) => {
     var incomingMsg = JSON.parse(clientMessage);
     var uniqueID = uuid.v1();
@@ -39,17 +52,15 @@ wss.on('connection', (ws) => {
       incomingMsg.type = "incomingMessage"
 
       broadcast(incomingMsg);
-
     }
 
-    if (incomingMsg.type == "postNotification"){
+    if (incomingMsg.type === "postNotification"){
       incomingMsg.id = uniqueID;
       incomingMsg.type = "incomingNotification"
 
       broadcast(incomingMsg);
 
     }
-
 
   })
 
