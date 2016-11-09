@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 
+
 class Message extends Component{
 
   render() {
@@ -7,7 +8,7 @@ class Message extends Component{
       return (
         <div>
           <div className="message">
-           <span className="username">{this.props.name}</span>
+           <span style={{color: this.props.msg}} className="username">{this.props.name}</span>
             <span className="content">{this.props.content}</span>
           </div>
         </div>

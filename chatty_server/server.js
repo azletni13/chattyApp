@@ -35,7 +35,6 @@ wss.on('connection', (ws) => {
   //gets a random colour from array of colours
   var rand = colours[Math.floor(Math.random() * colours.length)]
 
-  var userID = 0;
   var usersOnline = {usersOnline: usersOnline}
   var randomColour = {assignColour: rand}
 

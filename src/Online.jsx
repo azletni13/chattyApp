@@ -6,7 +6,7 @@ class Online extends Component{
     return (
       <nav>
         <h1>Chatty</h1>
-        <span>{this.props.currentOnline} user online</span>
+        <span>{this.props.currentOnline} users online</span>
       </nav>
     )
   }

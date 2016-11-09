@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+  import React, {Component} from 'react';
 import Message from './Message.jsx';
 
 class MessageList extends Component{
@@ -12,6 +12,7 @@ class MessageList extends Component{
                 name={message.username}
                 content={message.content}
                 type={message.type}
+                msg={message.colour}
               />
             ))
           }
